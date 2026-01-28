@@ -1,9 +1,7 @@
 import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
-import { loadEvents } from "./helpers";
+import { loadEvents } from "./helpers/index.js";
+import { loadCommands } from "./helpers/loadCommands.js";
 import path from "path";
-import { loadCommands } from "./helpers/loadCommands";
-
-
 
 const TOKEN = process.env.TOKEN;
 
