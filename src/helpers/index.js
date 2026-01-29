@@ -1,5 +1,5 @@
-export { default as loadEvents } from "./loadEvents";
-export { default as loadFiles } from "./loadFiles";
+export { loadEvents } from "./loadEvents.js";
+export { loadCommands } from "./loadCommands.js";
 
 require("dotenv").config();
 const { Client, GatewayIntentBits, Collection } = require("discord.js");
