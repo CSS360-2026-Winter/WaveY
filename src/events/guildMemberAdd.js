@@ -1,4 +1,4 @@
-import { EmbedBuilder, userMention } from "discord.js";
+import { userMention } from "discord.js";
 
 const CHANNEL_NAME = process.env.CHANNEL_NAME;
 //const MEME_URL = process.env.MEME_URL || "";
@@ -10,6 +10,7 @@ const event = {
       (channel) => channel.name === CHANNEL_NAME
     );
 
+
     /*
       TODO: Change getWelcomeMessage to getWelcomeMessageWithMeme to send a meme to welcome your user.
     */
@@ -20,8 +21,8 @@ const event = {
 
 const getWelcomeMessage = (userId) => {
   /*
-    this function returns a welcome message.
-    Play around with the code here and customise the welcome message.
+    Welcome message when a new member joins.
+    This is the bot's intro message. Customize as needed.
   */
   return {
     content: `Welcome ${userMention(userId)}, to the **WaveY Trivia Bot** server! 🚀

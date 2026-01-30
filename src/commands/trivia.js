@@ -1,10 +1,53 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
+import { activeTrivia } from "../helpers/activeTrivia.js";
+
+const questions = [
+  {
+    question: "What is the capital of France?",
+    options: ["Berlin", "Madrid", "Paris", "Rome"],
+    correctIndex: 2
+  },
+  {
+    question: "Which data structure follows FIFO?",
+    options: ["Stack", "Queue", "Tree", "Graph"],
+    correctIndex: 1
+  },
+  {
+    question: "Who developed the theory of relativity?",
+    options: ["Newton", "Tesla", "Einstein", "Galileo"],
+    correctIndex: 2
+  },
+  {
+    question: "What year was UW founded?",
+    options: ["1861", "1895", "1908", "1920"],
+    correctIndex: 0
+  }
+];
 
 export default {
   data: new SlashCommandBuilder()
     .setName("trivia")
     .setDescription("Start a trivia game!"),
+
   async execute(interaction) {
-    await interaction.reply("Trivia game started! 🎉");
-  }
+
+    await interaction.deferReply();
+
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    const q = questions[randomIndex];
+
+    const letters = ["A", "B", "C", "D"];
+    const correctLetter = letters[q.correctIndex];
+
+    // Store correct answer for THIS user
+    activeTrivia.set(interaction.user.id, { correctLetter });
+
+    const formattedOptions = q.options
+      .map((opt, i) => `**${letters[i]}.** ${opt}`)
+      .join("\n");
+
+    await interaction.editReply(
+      `🧠 **Trivia Question:**\n${q.question}\n\n${formattedOptions}\n\nReply with **A**, **B**, **C**, or **D**.`
+    );
+  },
 };
