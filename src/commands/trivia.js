@@ -16,6 +16,11 @@ const questions = [
     question: "Who developed the theory of relativity?",
     options: ["Newton", "Tesla", "Einstein", "Galileo"],
     correctIndex: 2
+  },
+  {
+    question: "What year was UW founded?",
+    options: ["1861", "1895", "1908", "1920"],
+    correctIndex: 0
   }
 ];
 
