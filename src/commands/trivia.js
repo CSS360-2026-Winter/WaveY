@@ -3,16 +3,19 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 const questions = [
   {
     question: "What is the capital of France?",
-    answer: "paris",
+    options: ["Berlin", "Madrid", "Paris", "Rome"],
+    correctIndex: 2
   },
   {
-    question: "What data structure uses FIFO order?",
-    answer: "queue",
+    question: "Which data structure follows FIFO?",
+    options: ["Stack", "Queue", "Tree", "Graph"],
+    correctIndex: 1
   },
   {
     question: "Who developed the theory of relativity?",
-    answer: "einstein",
-  },
+    options: ["Newton", "Tesla", "Einstein", "Galileo"],
+    correctIndex: 2
+  }
 ];
 
 export default {
@@ -24,10 +27,15 @@ export default {
   await interaction.deferReply();
 
   const randomIndex = Math.floor(Math.random() * questions.length);
-  const selectedQuestion = questions[randomIndex];
+  const q = questions[randomIndex];
 
-  await interaction.editReply(`🧠 **Trivia Question:**\n${selectedQuestion.question}`);
-},
+  const letters = ["A", "B", "C", "D"];
+  const formattedOptions = q.options
+    .map((opt, i) => `**${letters[i]}.** ${opt}`)
+    .join("\n");
 
+  await interaction.editReply(
+    `🧠 **Trivia Question:**\n${q.question}\n\n${formattedOptions}`
+  );
+}
 };
-
