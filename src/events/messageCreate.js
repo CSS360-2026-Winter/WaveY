@@ -1,19 +1,25 @@
-import { getMeme } from "../helpers/meme.js";
+import { activeTrivia } from "../helpers/activeTrivia.js";
 
-const event = {
+export default {
   name: "messageCreate",
-  execute(message) {
+  async execute(message) {
     if (message.author.bot) return;
 
-    if (message.content.toLowerCase() === 'hello') {
-      getMeme().then(meme => {
-        message.reply({
-          content: "Here’s a meme for you :) :)",
-          embeds: [meme],
-        });
-      });
+    const state = activeTrivia.get(message.author.id);
+    if (!state) return; // user isn't currently answering a trivia question
+
+    const input = message.content.trim().toUpperCase();
+    const letter = input[0];
+
+    if (!["A", "B", "C", "D"].includes(letter)) return;
+
+    if (letter === state.correctLetter) {
+      await message.reply("✅ Correct!");
+    } else {
+      await message.reply(`❌ Incorrect. The correct answer was **${state.correctLetter}**.`);
     }
+
+    // Clear the active question so they can't keep guessing
+    activeTrivia.delete(message.author.id);
   },
 };
-
-export default event;

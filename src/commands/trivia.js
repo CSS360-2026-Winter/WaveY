@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
+import { activeTrivia } from "../helpers/activeTrivia.js";
 
 const questions = [
   {
@@ -24,18 +25,23 @@ export default {
     .setDescription("Start a trivia game!"),
 
   async execute(interaction) {
-  await interaction.deferReply();
+    await interaction.deferReply();
 
-  const randomIndex = Math.floor(Math.random() * questions.length);
-  const q = questions[randomIndex];
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    const q = questions[randomIndex];
 
-  const letters = ["A", "B", "C", "D"];
-  const formattedOptions = q.options
-    .map((opt, i) => `**${letters[i]}.** ${opt}`)
-    .join("\n");
+    const letters = ["A", "B", "C", "D"];
+    const correctLetter = letters[q.correctIndex];
 
-  await interaction.editReply(
-    `🧠 **Trivia Question:**\n${q.question}\n\n${formattedOptions}`
-  );
-}
+    // Store correct answer for THIS user
+    activeTrivia.set(interaction.user.id, { correctLetter });
+
+    const formattedOptions = q.options
+      .map((opt, i) => `**${letters[i]}.** ${opt}`)
+      .join("\n");
+
+    await interaction.editReply(
+      `🧠 **Trivia Question:**\n${q.question}\n\n${formattedOptions}\n\nReply with **A**, **B**, **C**, or **D**.`
+    );
+  },
 };
