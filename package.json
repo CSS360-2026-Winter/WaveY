@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "trivia_discord",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "this is a trivia bot to play a game with friends",
   "scripts": {
   "register": "node -r dotenv/config src/deploy-commands.js",
