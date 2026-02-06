@@ -36,23 +36,12 @@ Giselle McNeill
 
   (02/04/2026)
 
-  ```mermaid
-flowchart TB
-  Discord[(Discord API/Gateway)] <--> Client["Discord Client\n(created in src/app.js)"]
+Code Architecture : Aditi Menon
 
-  App["src/app.js"] --> Client
-  App --> Init["src/helpers/index.js"]
+![Class Diagram](images/I.png)
 
-  Init --> LoadCmds["src/helpers/loadCommands.js"]
-  Init --> LoadEvts["src/helpers/loadEvents.js"]
-  LoadCmds --> LoadFiles["src/helpers/loadFiles.js"]
-  LoadEvts --> LoadFiles
+This class diagram presents the code architecture of the WaveY bot, with dependency relationships represented by dotted lines between modules to indicate how different components rely on one another at runtime. The application entry point (app.js) creates the Discord client and initializes the system by invoking helpers/index.js, which coordinates the dynamic loading of command and event modules. loadCommands.js loads command implementations such as trivia.js, while loadEvents.js registers event handlers including ready.js, messageCreate.js, and guildMemberAdd.js through the shared loadFiles.js utility. The trivia command depends on helper modules like activeTrivia.js for session management and evaluateAnswer.js for answer validation, demonstrating a modular separation between core application logic, event routing, and reusable domain functionality.
 
-  LoadCmds --> Trivia["src/commands/trivia.js"]
-  LoadEvts --> IC["src/events/interactionCreate.js"]
-  LoadEvts --> MC["src/events/messageCreate.js"]
-
-```
 
 
 
