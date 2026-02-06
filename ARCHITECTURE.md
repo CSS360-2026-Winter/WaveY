@@ -36,30 +36,125 @@ Giselle McNeill
 
   (02/04/2026)
 
-  ```mermaid
-flowchart TB
-  Discord[(Discord API / Gateway)] <--> Login["client.login(process.env.TOKEN)"]
+classDiagram
+  %% ===== Core runtime =====
+  class App {
+    +Client client
+    +Collection commands
+    +Collection events
+    +start()
+  }
 
-  App["src/app.js\n(create Client + registries)"] --> Client["Discord Client\n(new Client(...))"]
-  App --> Login
-  Login --> Discord
+  class DiscordClient {
+    +login(token)
+    +on(event, handler)
+  }
 
-  App --> CmdReg["client.commands = new Collection()"]
-  App --> EvtReg["client.events = new Collection()"]
+  class Collection {
+    +set(key, value)
+    +get(key)
+    +has(key)
+  }
 
-  App --> Init["src/helpers/index.js\n(exports loaders; loads dotenv)"]
-  Init --> LoadEvts["loadEvents(client, src/events)\nsrc/helpers/loadEvents.js"]
-  Init --> LoadCmds["loadCommands(client, src/commands)\nsrc/helpers/loadCommands.js"]
-  LoadEvts --> Ready["src/events/ready.js"]
-  LoadEvts --> IC["src/events/interactionCreate.js"]
-  LoadEvts --> MC["src/events/messageCreate.js"]
-  LoadEvts --> Join["src/events/guildMemberAdd.js"]
+  %% ===== Loaders / helpers =====
+  class HelpersIndex {
+    <<module>>
+    +loadEvents(client, eventsPath)
+    +loadCommands(client, commandsPath)
+  }
 
-  LoadCmds --> Trivia["src/commands/trivia.js"]
-  Trivia --> Active["src/helpers/activeTrivia.js"]
-  Trivia --> Eval["src/helpers/evaluateAnswer.js"]
-```
+  class LoadEvents {
+    <<module>>
+    +loadEvents(client, eventsPath)
+  }
 
+  class LoadCommands {
+    <<module>>
+    +loadCommands(client, commandsPath)
+  }
+
+  class LoadFiles {
+    <<module>>
+    +loadFiles(dirPath)
+  }
+
+  %% ===== Events =====
+  class EventHandler {
+    <<interface>>
+    +name
+    +execute(client, payload)
+  }
+
+  class ReadyEvent {
+    +name
+    +execute(client)
+  }
+
+  class InteractionCreateEvent {
+    +name
+    +execute(client, interaction)
+  }
+
+  class MessageCreateEvent {
+    +name
+    +execute(client, message)
+  }
+
+  class GuildMemberAddEvent {
+    +name
+    +execute(client, member)
+  }
+
+  %% ===== Commands =====
+  class Command {
+    <<interface>>
+    +data
+    +execute(client, interaction)
+  }
+
+  class TriviaCommand {
+    +data
+    +execute(client, interaction)
+    +handleAnswer(...)
+  }
+
+  %% ===== Trivia domain helpers =====
+  class ActiveTrivia {
+    <<module>>
+    +getSession(userId)
+    +startSession(userId)
+    +updateSession(userId, result)
+    +endSession(userId)
+  }
+
+  class EvaluateAnswer {
+    <<module>>
+    +evaluateAnswer(userAnswer, correctAnswer)
+  }
+
+  %% ===== Relationships =====
+  App --> DiscordClient : creates
+  App --> HelpersIndex : imports
+  App --> Collection : commands/events stored in
+
+  HelpersIndex --> LoadEvents : re-exports
+  HelpersIndex --> LoadCommands : re-exports
+  LoadEvents --> LoadFiles : uses
+  LoadCommands --> LoadFiles : uses
+
+  LoadEvents --> EventHandler : loads implementations
+  LoadCommands --> Command : loads implementations
+
+  EventHandler <|.. ReadyEvent
+  EventHandler <|.. InteractionCreateEvent
+  EventHandler <|.. MessageCreateEvent
+  EventHandler <|.. GuildMemberAddEvent
+
+  Command <|.. TriviaCommand
+
+  InteractionCreateEvent --> Collection : reads client.commands
+  TriviaCommand --> ActiveTrivia : session/state
+  TriviaCommand --> EvaluateAnswer : grading logic
 
 
 
