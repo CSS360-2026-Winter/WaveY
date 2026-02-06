@@ -36,4 +36,27 @@ Giselle McNeill
 
   (02/04/2026)
 
+  ```mermaid
+flowchart TB
+  App["src/app.js"] --> Init["src/helpers/index.js"]
+  Deploy["src/deploy-commands.js"]
+
+  Init --> LoadCmds["src/helpers/loadCommands.js"]
+  Init --> LoadEvts["src/helpers/loadEvents.js"]
+  LoadCmds --> LoadFiles["src/helpers/loadFiles.js"]
+  LoadEvts --> LoadFiles
+
+  LoadCmds --> Trivia["src/commands/trivia.js"]
+
+  LoadEvts --> Ready["src/events/ready.js"]
+  LoadEvts --> IC["src/events/interactionCreate.js"]
+  LoadEvts --> MC["src/events/messageCreate.js"]
+  LoadEvts --> Join["src/events/guildMemberAdd.js"]
+
+  Trivia --> Active["src/helpers/activeTrivia.js"]
+  Trivia --> Eval["src/helpers/evaluateAnswer.js"]
+```
+
+
+
 
