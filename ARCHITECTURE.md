@@ -38,9 +38,11 @@ Giselle McNeill
 
 Code Architecture : Aditi Menon
 
-![Class Diagram](images/I.png)
+![Code Architecture Class Diagram](codeArch.png)
+
 
 This class diagram presents the code architecture of the WaveY bot, with dependency relationships represented by dotted lines between modules to indicate how different components rely on one another at runtime. The application entry point (app.js) creates the Discord client and initializes the system by invoking helpers/index.js, which coordinates the dynamic loading of command and event modules. loadCommands.js loads command implementations such as trivia.js, while loadEvents.js registers event handlers including ready.js, messageCreate.js, and guildMemberAdd.js through the shared loadFiles.js utility. The trivia command depends on helper modules like activeTrivia.js for session management and evaluateAnswer.js for answer validation, demonstrating a modular separation between core application logic, event routing, and reusable domain functionality.
+
 
 
 
