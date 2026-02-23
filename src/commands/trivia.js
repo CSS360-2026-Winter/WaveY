@@ -41,6 +41,15 @@ export default {
 
     await interaction.deferReply();
 
+    //check if user already has an active trivia session
+
+  const userId = interaction.user.id; 
+    if(activeTrivia.has(userId)){
+      return interaction.editReply(
+        `${userMention(userId)}, you already have an active trivia session! Finish it before starting a new one.`
+      );
+    }
+
     const welcomeMsg = `
     Welcome ${userMention(interaction.user.id)}, to the **WaveY Trivia Bot**! 🚀
     To play the game, you will be given trivia questions and **four answers** to choose from.      
