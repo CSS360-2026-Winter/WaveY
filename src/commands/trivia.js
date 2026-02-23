@@ -43,7 +43,7 @@ export default {
     }
 
     const welcomeMsg = `
-    Welcome ${userMention(interaction.user.id)}, to the **WaveY Trivia Bot**! 🚀
+    Welcome ${userMention(userId)}, to the **WaveY Trivia Bot**! 🚀
     To play the game, you will be given trivia questions and **four answers** to choose from.      
     I will then tell you if you are ✅ **correct** or ❌ **incorrect**.
     For help, type \`/\` to see my commands.   
@@ -57,7 +57,12 @@ export default {
     const correctAnswer = letters[q.correctIndex];
 
     // Store correct answer for THIS user
-    activeTrivia.set(userId, { correctAnswer });
+    activeTrivia.set(userId, {
+     //keep score and count of questions
+      correctAnswer: correctAnswer,
+      score: 0, 
+      questionCount: 1
+   });
     const formattedOptions = q.options
       .map((opt, i) => `**${letters[i]}.** ${opt}`)
       .join("\n");
