@@ -78,12 +78,12 @@ export default {
       await interaction.reply(welcomeMsg);
     }
 
-    // TODO: this is all currently filler for testing
+    // Cap questions at 10 and implement a timer for each question
     while (true) {
       const session = activeTrivia.get(userId);
       if (!session) break;
 
-      if (session.questionCount >= 5) break;
+      if (session.questionCount >= 10) break;
 
       const randomIndex = Math.floor(Math.random() * questions.length);
       const q = questions[randomIndex];
@@ -126,6 +126,9 @@ async function askQuestion(interaction, userId, q) {
       max: 1
     });
 
+    //added for the exit command
+    session.collector = collector;
+
     collector.on("collect", async (buttonInteraction) => {
       await buttonInteraction.deferUpdate();
 
@@ -159,6 +162,10 @@ async function askQuestion(interaction, userId, q) {
     });
 
     collector.on("end", async (collected, reason) => {
+        if (reason === 'user_exited') {
+          return resolve(true); // This breaks the while loop immediately
+        }
+        
         if (reason === "time" && collected.size === 0) {
           session.questionCount += 1;
           activeTrivia.set(userId, session);
