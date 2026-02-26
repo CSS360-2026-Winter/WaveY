@@ -25,7 +25,7 @@ export default {
 
     if (channel) { //actual message being sent
   await channel.send({
-    content: "# 🎮 Trivia Bot is online! \nType **/trivia** to begin!",
+    content: "# 🎮 TRIVIA TIME! 🎮  \nType **/trivia** to begin!",
     files: [
       "https://www.ignitesocialmedia.com/wp-content/uploads/2018/02/YpJilaXXT8qJR6HQVKFM_ISM_Trivia.gif"
     ]
