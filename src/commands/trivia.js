@@ -4,7 +4,6 @@ import {
   ButtonBuilder,
   ButtonStyle,
   userMention,
-  InteractionContextType,
 } from "discord.js";
 
 import { activeTrivia } from "../helpers/activeTrivia.js";
@@ -127,11 +126,11 @@ export default {
     }
 
     const welcomeMsg = `
-    Welcome ${userMention(userId)}, to the **WaveY Trivia Bot**! 🚀
-    To play the game, you will be given trivia questions and **four answers** to choose from.      
-    I will then tell you if you are ✅ **correct** or ❌ **incorrect**.
-    For help, type \`/\` to see my commands.   
-    **Have fun!** 🥳`.trim().split('\n').map(line => line.trim()).join('\n');
+      Welcome ${userMention(userId)}, to the **WaveY Trivia Bot**! 🚀
+      To play the game, you will be given trivia questions and **four answers** to choose from.      
+      I will then tell you if you are ✅ **correct** or ❌ **incorrect**.
+      For help, type \`/\` to see my commands.   
+      **Have fun!** 🥳`.trim().split('\n').map(line => line.trim()).join('\n');
 
     // Store correct answer for THIS user
     activeTrivia.set(userId, {
@@ -147,130 +146,122 @@ export default {
       await interaction.reply(welcomeMsg);
     }
 
-//SELECT THE CATEGORY 
+    // SELECT THE CATEGORY 
 
-//categoies being offered
-const categories = ["STEM", "Shows & Movies", "Geography & History", "Pop Culture"];
+    // categoies being offered
+    const categories = ["STEM", "Shows & Movies", "Geography & History", "Pop Culture"];
 
-// create row of buttons, all different colors! 
-// success = green, primary = blue, danger = red, secondary = grey 
-const categoryButtons = new ActionRowBuilder().addComponents(
-  [
-    { name: "STEM", style: ButtonStyle.Success },
-    { name: "Shows & Movies", style: ButtonStyle.Success },
-    { name: "Geography & History", style: ButtonStyle.Success },
-    { name: "Pop Culture", style: ButtonStyle.Success },
-  ].map(cat =>
-    new ButtonBuilder()
-      .setCustomId(`category_${cat.name.toLowerCase().replace(/ & /g, "_").replace(/ /g,"_")}`)
-      .setLabel(cat.name)
-      .setStyle(cat.style)
-  )
-);
+    // create row of buttons, all different colors! 
+    // success = green, primary = blue, danger = red, secondary = grey 
+    const categoryButtons = new ActionRowBuilder().addComponents(
+      [
+        { name: "STEM", style: ButtonStyle.Success },
+        { name: "Shows & Movies", style: ButtonStyle.Success },
+        { name: "Geography & History", style: ButtonStyle.Success },
+        { name: "Pop Culture", style: ButtonStyle.Success },
+      ].map(cat =>
+        new ButtonBuilder()
+          .setCustomId(`category_${cat.name.toLowerCase().replace(/ & /g, "_").replace(/ /g,"_")}`)
+          .setLabel(cat.name)
+          .setStyle(cat.style)
+      )
+    );
 
-// send message prompting user to pick category
-const categoryMessage = await interaction.followUp({
-  content: "Choose a category to start your trivia game! 🎯",
-  components: [categoryButtons],
-});
-
-// set up a promise to wait until user selects a category or time runs out
-//promise = pause the code until the user clicks a category or it times out
-const categorySelected = new Promise((resolve) => {
-  //create a collector that waits for the selected user to pick a button
-  const collector = categoryMessage.createMessageComponentCollector({
-    filter: i => i.user.id === userId,
-    max: 1,
-    time: 30000, // 30s to pick category
-  });
-
-  //collecter picks up selection from the user
-  collector.on("collect", async (buttonInteraction) => {
-    
-    // get user session to store category 
-    const session = activeTrivia.get(buttonInteraction.user.id);
-    if (!session) { //if no session, inform the user
-      console.error("Session missing for user!");
-      return resolve(false);
-    }
-
-//pulls the category and saves it to the user session
-    const chosenCategory = buttonInteraction.customId.replace("category_", "");
-    session.category = chosenCategory;
-    activeTrivia.set(buttonInteraction.user.id, session);
-
-    // confirm category and remove buttons
-    await buttonInteraction.update({
-      content: `You chose **${buttonInteraction.component.label}**! Let's start the trivia. 🎉`,
-      components: [],
+    // send message prompting user to pick category
+    const categoryMessage = await interaction.followUp({
+      content: "Choose a category to start your trivia game! 🎯",
+      components: [categoryButtons],
     });
 
-    //resolves the promise that user 
-    resolve(true); // only resolve after category is saved
-  });
-
-  //handles the timeout case
-  collector.on("end", async (collected) => {
-    if (collected.size === 0) {
-      await categoryMessage.edit({
-        content: "⏰ You didn’t choose a category in time!",
-        components: [],
+    // set up a promise to wait until user selects a category or time runs out
+    // promise = pause the code until the user clicks a category or it times out
+    const categorySelected = new Promise((resolve) => {
+      // create a collector that waits for the selected user to pick a button
+      const collector = categoryMessage.createMessageComponentCollector({
+        filter: i => i.user.id === userId,
+        max: 1,
+        time: 30000, // 30s to pick category
       });
-      resolve(false);
-    }
+
+      // collecter picks up selection from the user
+      collector.on("collect", async (buttonInteraction) => {
+        // get user session to store category 
+        const session = activeTrivia.get(buttonInteraction.user.id);
+        if (!session) { // if no session, inform the user
+          console.error("Session missing for user!");
+          return resolve(false);
+        }
+
+        // pulls the category and saves it to the user session
+        const chosenCategory = buttonInteraction.customId.replace("category_", "");
+        session.category = chosenCategory;
+        activeTrivia.set(buttonInteraction.user.id, session);
+
+        // confirm category and remove buttons
+        await buttonInteraction.update({
+          content: `You chose **${buttonInteraction.component.label}**! Let's start the trivia. 🎉`,
+          components: [],
+        });
+
+        // resolves the promise that user 
+        resolve(true); // only resolve after category is saved
+      });
+
+      // handles the timeout case
+      collector.on("end", async (collected) => {
+        if (collected.size === 0) {
+          await categoryMessage.edit({
+            content: "⏰ You didn’t choose a category in time!",
+            components: [],
+          });
+          resolve(false);
+        }
+      });
   });
-});
 
-// wait for user to pick category
-const categorySuccess = await categorySelected;
+  // wait for user to pick category
+  const categorySuccess = await categorySelected;
 
-// check if valid category was selected
-const sessionAfterCategory = activeTrivia.get(userId);
-if (!categorySuccess || !sessionAfterCategory?.category) {
-  activeTrivia.delete(userId);
-  return;
-}
-//debugging 
-//console.log("AFTER CATEGORY:", sessionAfterCategory);
-
-    // Cap questions at 10 and implement a timer for each question
-   while (true) {
-  const session = activeTrivia.get(userId);
-  if (!session) break;
-
-  //testing
-  console.log("SESSION CATEGORY:", session.category);
-console.log("MATCHING QUESTIONS:", questions.filter(q => q.category === session.category).length);
-
-  const categoryQuestions = questions.filter(q => q.category === session.category);
-
-  // stop after 10 questions
-  if (session.questionCount >= 10) break;
-
-  // make sure session.asked exists (in case things got moved)
-  if (!Array.isArray(session.asked)) session.asked = [];
-
-  // stop if we run out of unique questions
-  if (session.asked.length >= categoryQuestions.length) break;
-
-  // pick an unused question index
-  let randomIndex = Math.floor(Math.random() * categoryQuestions.length);
-  while (session.asked.includes(randomIndex)) {
-    randomIndex = Math.floor(Math.random() * categoryQuestions.length);
+  // check if valid category was selected
+  const sessionAfterCategory = activeTrivia.get(userId);
+  if (!categorySuccess || !sessionAfterCategory?.category) {
+    activeTrivia.delete(userId);
+    return;
   }
 
-  session.asked.push(randomIndex);
-  activeTrivia.set(userId, session);
+  // Cap questions at 10 and implement a timer for each question
+  while (true) {
+    const session = activeTrivia.get(userId);
+    if (!session) break;
 
-  const q = categoryQuestions[randomIndex];
+    const categoryQuestions = questions.filter(q => q.category === session.category);
 
-  // ask question; if user explicitly exited, end session
-  const endedSession = await askQuestion(interaction, userId, q);
-  if (endedSession) break;
-}
+    // stop after 10 questions
+    if (session.questionCount >= 10) break;
 
-await showScoreboard(interaction);
-activeTrivia.delete(userId);
+    // make sure session.asked exists (in case things got moved)
+    if (!Array.isArray(session.asked)) session.asked = [];
+
+    // stop if we run out of unique questions
+    if (session.asked.length >= categoryQuestions.length) break;
+
+    // pick an unused question index
+    let randomIndex = Math.floor(Math.random() * categoryQuestions.length);
+    while (session.asked.includes(randomIndex)) {
+      randomIndex = Math.floor(Math.random() * categoryQuestions.length);
+    }
+
+    session.asked.push(randomIndex);
+    activeTrivia.set(userId, session);
+
+    const q = categoryQuestions[randomIndex];
+
+    // ask question; if user explicitly exited, end session
+    const endedSession = await askQuestion(interaction, userId, q);
+    if (endedSession) break;
+  }
+  await showScoreboard(interaction);
+  activeTrivia.delete(userId);
   },
 };
 
