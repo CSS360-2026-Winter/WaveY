@@ -129,7 +129,7 @@ export default {
       Welcome ${userMention(userId)}, to the **WaveY Trivia Bot**! 🚀
       📢 **READ BEFORE YOU START PLAYING:** 📢
       1) To start off, you can choose the category you want to play in, and then we will get started!
-      2) To play the game, you will be given trivia questions and **four answers** to choose from.      
+      2) To play the game, you will be given trivia questions and **four answers** to choose from. You need a 50% or higher to win, so choose wisely!   
       3) I will then tell you if you are ✅ **correct** or ❌ **incorrect**, and tell you the correct answer.
       4) You can play up to 10 questions per game, and your score will be tracked along the way.
       5) You also have 30 seconds to answer each question, so be quick! ⏰ 
