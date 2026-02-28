@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
 import { activeTrivia } from "../helpers/activeTrivia.js";
-import { showScoreboard } from "../helpers/scoreboard.js";
 
 export default {
   data: new SlashCommandBuilder()
