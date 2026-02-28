@@ -320,15 +320,31 @@ async function askQuestion(interaction, userId, q) {
       session.questionCount += 1;
       activeTrivia.set(userId, session);
 
-      const disabledRow = new ActionRowBuilder().addComponents(
-        row.components.map((button) =>
-          ButtonBuilder.from(button).setDisabled(true)
-        )
+      // Map through components to change colors
+      const updatedRow = new ActionRowBuilder().addComponents(
+        row.components.map((button) => {
+          const buttonData = ButtonBuilder.from(button);
+          const buttonId = button.data.custom_id;
+
+          if (buttonId === correctLetter) {
+            // Always turn the correct answer Green
+            buttonData.setStyle(ButtonStyle.Success);
+          } else if (buttonId === userChoice && userChoice !== correctLetter) {
+            // If user picked this and it's wrong, turn it Red
+            buttonData.setStyle(ButtonStyle.Danger);
+          } else {
+            // Keep others Grey/Secondary so they don't distract
+            buttonData.setStyle(ButtonStyle.Secondary);
+          }
+
+          return buttonData.setDisabled(true); // Disable all
+        })
       );
 
+      // Edit the original message with the new colors
       await buttonInteraction.editReply({
         content: `🧠 **Trivia Question:**\n${q.question}\n${result.message}\n\n⭐ Score: ${session.score}/${session.questionCount}`,
-        components: [disabledRow],
+        components: [updatedRow],
       });
 
       resolve(false);      
