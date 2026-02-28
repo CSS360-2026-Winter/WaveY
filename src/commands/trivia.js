@@ -142,6 +142,7 @@ export default {
       // Keep score and count of questions
       score: 0, 
       questionCount: 0,
+      streak: 0,
       asked : [] // Track asked questions to avoid repeats
     });
 
@@ -315,10 +316,23 @@ async function askQuestion(interaction, userId, q) {
 
       if (userChoice === correctLetter) {
         session.score += 1;
+        session.streak += 1;
+      } else {
+        session.streak = 0; // Reset streak on wrong answer
       }
 
       session.questionCount += 1;
       activeTrivia.set(userId, session);
+
+      // Create the 🔥 visual
+      let streakEmoji = "";
+      if (session.streak >= 3 && session.streak < 5) streakEmoji = " 🔥";
+      if (session.streak >= 5 && session.streak < 8) streakEmoji = " 🧨";
+      if (session.streak >= 8) streakEmoji = " ☄️ SUPERNOVA!!";
+
+      const streakDisplay = session.streak >= 3 
+        ? `\n**Streak: ${session.streak}${streakEmoji}**` 
+        : "";
 
       // Map through components to change colors
       const updatedRow = new ActionRowBuilder().addComponents(
@@ -341,9 +355,9 @@ async function askQuestion(interaction, userId, q) {
         })
       );
 
-      // Edit the original message with the new colors
+      // Edit the original message with the new colors and streak
       await buttonInteraction.editReply({
-        content: `🧠 **Trivia Question:**\n${q.question}\n${result.message}\n\n⭐ Score: ${session.score}/${session.questionCount}`,
+        content: `🧠 **Trivia Question:**\n${q.question}\n${result.message}${streakDisplay}\n\n⭐ Score: ${session.score}/${session.questionCount}`,
         components: [updatedRow],
       });
 
