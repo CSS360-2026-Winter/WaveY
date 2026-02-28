@@ -10,7 +10,7 @@
 
 WaveY Trivia is an interactive Discord bot that lets users play a multiple-choice, categorized trivia game directly in a Discord server. 
 
-The bot lets users start a personal trivia session via a slash command. Each game presents the user with four categories, randomized questions, tracks the player's score, and provides immediate feedback after each answer.
+The bot lets users start a personal trivia session via a slash command. Each game presents the user with four categories, randomized questions, tracks the player's score, and provides immediate feedback after each answer, and lets the user know if they won or lost at the end.
 
 **Features:**
 - When the bot comes online, a message displays
@@ -21,7 +21,7 @@ The bot lets users start a personal trivia session via a slash command. Each gam
 - Interactive buttons to choose answers
 - Immediate correct/incorrect feedback (with the correct answer if user was wrong)
 - Automatic progression through questions
-- The final scoreboard is displayed after 10 questions
+- The final scoreboard and results is displayed after 10 questions
 - Exit command to end game early with "/exit"
 
 **GamePlay:**
@@ -42,7 +42,7 @@ The Trivia Bot will post a "Correct!" or "Incorrect!" in the Discord server, and
 
 The next question will automatically appear for the user after the current question is answered, and no repeat questions will be offered. 
 
-Once the user completes 10 questions, the scoreboard will appear, displaying the number of questions answered and the user's score, and the game ends. 
+Once the user completes 10 questions, the scoreboard will appear, displaying the number of questions answered and the user's score and if they won or lost, and the game ends. 
 
 
 **Session Management:** 
@@ -53,7 +53,7 @@ Timeout features are implemented for both categories and multiple-choice buttons
 
 **Ending Game Early:**
 
-If you would like to end the game early, use the "/exit" command to display the scoreboard and end the game immediately, even if you haven't reached the full 10 questions. 
+If you would like to end the game early, use the "/exit" command to display the scoreboard and end the game immediately, even if you haven't reached the full 10 questions. You win if you answered more than or equal to 50% of the questions correctly.
 
 **Running Bot Locally:**
 
@@ -98,6 +98,7 @@ npm start
 
 After running:
 The bot should respond to /trivia once coming online
+
 
 
 
