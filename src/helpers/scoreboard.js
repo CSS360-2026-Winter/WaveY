@@ -19,7 +19,7 @@ export function showScoreboard(interaction) {
   // Pick any losing gif you like (Tenor link shown as example)
   const loseGif =
    
-    "https://media.tenor.com/1l9n2sXo8jIAAAAM/fail-failed.gif";
+    "https://media.tenor.com/abcd1234xyzAAAAM/bart-at-least-you-tried.gif";
 
   const embed = {
     title: didWin ? `🏆 Trivia Complete! 🎆🎉` : `💀 Trivia Complete... 😵‍💫`,
