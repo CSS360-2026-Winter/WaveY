@@ -24,6 +24,7 @@ The bot lets users start a personal trivia session via a slash command. Each gam
 - Automatic progression through questions
 - The final scoreboard and results is displayed after 10 questions
 - Exit command to end game early with "/exit"
+- Session management to prevent faulty gameplay
 
 **GamePlay:**
 
@@ -54,7 +55,7 @@ Lastly, the game ends!
 
 **Session Management:** 
 
-The bot will only allow one active game session per user, if another instance of a game is attempted the bot will inform the user that they already have an active game going. 
+The bot will only allow one active game session per user, if another instance of a game is attempted the bot will inform the user that they already have an active game going. To add, the bot will inform the user that there is not current trivia session if they try to use the exit command while not in an active game session.
 
 Timeout features are implemented for both categories and multiple-choice buttons. If no button is selected after 30 seconds, the bot will time the user out to protect the session. The user will be informed and can now safely create a new game whenever they would like. 
 
@@ -105,6 +106,7 @@ npm start
 
 After running:
 The bot should respond to /trivia once coming online
+
 
 
 
