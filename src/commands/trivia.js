@@ -134,7 +134,7 @@ export default {
       4) You can play up to 10 questions per game, and your score will be tracked along the way.
       5) You also have 30 seconds to answer each question, so be quick! ⏰ 
       All the best, and may the trivia odds be ever in your favor! 🏆
-      **Note:** If you want to exit the game early, use the comman "/exit" to end your session and see your final score.
+      **Note:** If you want to exit the game early, use the command "/exit" to end your session and see your final score.
       **Have fun!** 🥳`.trim().split('\n').map(line => line.trim()).join('\n');
 
     // Store correct answer for THIS user
