@@ -48,6 +48,7 @@ Once the user completes 10 questions, the scoreboard will appear, displaying:
 - The best streak
 - The user's score with a percentage
 - Whether the user won or lost
+
 Lastly, the game ends!
 
 
@@ -104,6 +105,7 @@ npm start
 
 After running:
 The bot should respond to /trivia once coming online
+
 
 
 
