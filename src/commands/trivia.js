@@ -127,9 +127,12 @@ export default {
 
     const welcomeMsg = `
       Welcome ${userMention(userId)}, to the **WaveY Trivia Bot**! 🚀
+      :horn: **READ BEFORE YOU START PLAYING:** :horn:
+      To start off, you can choose the category you want to play in, and then we will get started!
       To play the game, you will be given trivia questions and **four answers** to choose from.      
-      I will then tell you if you are ✅ **correct** or ❌ **incorrect**.
-      For help, type \`/\` to see my commands.   
+      I will then tell you if you are ✅ **correct** or ❌ **incorrect**, and tell you the correct answer.
+      You can play up to 10 questions per game, and your score will be tracked along the way.
+      You also have 30 seconds to answer each question, so be quick! ⏰ 
       **Have fun!** 🥳`.trim().split('\n').map(line => line.trim()).join('\n');
 
     // Store correct answer for THIS user
