@@ -17,10 +17,8 @@ export function showScoreboard(interaction) {
     "https://media.tenor.com/L9kNtb5Ak2IAAAAM/congrats-congratulations.gif";
 
   // Pick any losing gif you like (Tenor link shown as example)
-  const loseGif =
-   
-    "https://media1.tenor.com/m/q9_zZ9BgOYEAAAAC/bart-the-simpsons.gif";
-
+    const loseGif =
+  "https://media.discordapp.net/attachments/1460739756404117610/1477151957327151259/loser.gif";
   const embed = {
     title: didWin ? `🏆 Trivia Complete! 🎆🎉` : `💀 Trivia Complete... 😵‍💫`,
     description:
