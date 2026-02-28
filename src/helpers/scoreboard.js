@@ -6,6 +6,7 @@ export function showScoreboard(interaction) {
   const session = activeTrivia.get(userId);
   const score = session?.score ?? 0;
   const questions = session?.questionCount ?? 0;
+  const maxStreak = session?.maxStreak ?? 0;
 
   // Avoid divide-by-zero
   const percent = questions > 0 ? score / questions : 0;
@@ -19,12 +20,20 @@ export function showScoreboard(interaction) {
   // Pick any losing gif you like (Tenor link shown as example)
     const loseGif =
   "https://media.discordapp.net/attachments/1460739756404117610/1477151957327151259/loser.gif";
+  
+  // Dynamic Icon based on the Best Streak
+  let streakIcon = "⭐";
+  if (maxStreak >= 3) streakIcon = "🔥";
+  if (maxStreak >= 5) streakIcon = "🧨";
+  if (maxStreak >= 8) streakIcon = "☄️";
+  
   const embed = {
     title: didWin ? `🏆 Trivia Complete! 🎆🎉` : `💀 Trivia Complete... 😵‍💫`,
     description:
       `${userMention(userId)}, your trivia game has ended!\n\n` +
       `Questions answered: **${questions}**\n` +
-      `Your score: **${score}/${questions}** (**${percentLabel}**)\n\n` +
+      `Your score: **${score}/${questions}** (**${percentLabel}**)\n` +
+      `Best Streak: **${maxStreak}** ${streakIcon}\n\n` +
       (didWin
         ? `✅ Congrats! You scored **50%+**!`
         : `❌ Oof, You Lost — under **50%**! Try again!`),

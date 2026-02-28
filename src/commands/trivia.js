@@ -143,6 +143,7 @@ export default {
       score: 0, 
       questionCount: 0,
       streak: 0,
+      maxStreak: 0,
       asked : [] // Track asked questions to avoid repeats
     });
 
@@ -317,6 +318,11 @@ async function askQuestion(interaction, userId, q) {
       if (userChoice === correctLetter) {
         session.score += 1;
         session.streak += 1;
+
+        // Update maxStreak if current streak is higher
+        if (session.streak > session.maxStreak) {
+          session.maxStreak = session.streak;
+        }
       } else {
         session.streak = 0; // Reset streak on wrong answer
       }
