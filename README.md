@@ -20,6 +20,7 @@ The bot lets users start a personal trivia session via a slash command. Each gam
 - Multiple-choice categorized questions
 - Interactive buttons to choose answers
 - Immediate correct/incorrect feedback (with the correct answer if user was wrong)
+- Green/Red change in button colors based on incorrect/correct answers
 - Automatic progression through questions
 - The final scoreboard and results is displayed after 10 questions
 - Exit command to end game early with "/exit"
@@ -38,11 +39,16 @@ This will be followed by a categorized question and 4 multiple choice answers.
 
 After selecting an answer using the interactive buttons, the user can then be notified if the answer to the prompted question is correct or incorrect.
 
-The Trivia Bot will post a "Correct!" or "Incorrect!" in the Discord server, and if incorrect, the correct answer will be displayed as well. The bot will also show your score throughout the game. The game consists of 10 questions, so as the game progresses, the bot will update your score and display it in the chat.
+The Trivia Bot will post a "Correct!" or "Incorrect!" in the Discord server, and if incorrect, the correct answer will be displayed as well. The button color will also change to green if correct and red if incorrect. Throughout the game, the bot will also show your streak once 3 questions are answered correctly and the score. The game consists of 10 questions, so as the game progresses, the bot will update your score and streak, then display it in the chat.
 
 The next question will automatically appear for the user after the current question is answered, and no repeat questions will be offered. 
 
-Once the user completes 10 questions, the scoreboard will appear, displaying the number of questions answered and the user's score and if they won or lost, and the game ends. 
+Once the user completes 10 questions, the scoreboard will appear, displaying: 
+- The number of questions answered
+- The best streak
+- The user's score with a percentage
+- Whether the user won or lost
+Lastly, the game ends!
 
 
 **Session Management:** 
@@ -98,6 +104,7 @@ npm start
 
 After running:
 The bot should respond to /trivia once coming online
+
 
 
 
