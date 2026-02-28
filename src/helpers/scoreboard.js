@@ -18,7 +18,8 @@ export function showScoreboard(interaction) {
 
   // Pick any losing gif you like (Tenor link shown as example)
   const loseGif =
-    "https://tenor.com/view/the-office-better-luck-next-time-nice-try-pal-good-luck-gif-6671070021341321348";
+   
+    "https://media.tenor.com/1l9n2sXo8jIAAAAM/fail-failed.gif";
 
   const embed = {
     title: didWin ? `🏆 Trivia Complete! 🎆🎉` : `💀 Trivia Complete... 😵‍💫`,
