@@ -19,7 +19,7 @@ The bot lets users start a personal trivia session via a slash command. Each gam
 - Interactive category buttons
 - Multiple-choice categorized questions
 - Interactive buttons to choose answers
-- Immediate correct/incorrect feedback
+- Immediate correct/incorrect feedback (with the correct answer if user was wrong)
 - Automatic progression through questions
 - The final scoreboard is displayed after 10 questions
 - Exit command to end game early with "/exit"
@@ -98,6 +98,7 @@ npm start
 
 After running:
 The bot should respond to /trivia once coming online
+
 
 
 
