@@ -156,7 +156,7 @@ export default {
           Pop Quiz: A random question from any category for 1 extra point.
           Double Points: A question from your chosen category that is worth 2 points instead of 1!
         You will be given 30 seconds to accept or decline the bonus question 🙋
-      6) You also have 30 seconds to answer each question, so be quick! ⏰ 
+      6) You also have 45 seconds to answer each question, so be quick! ⏰ 
       All the best, and may the trivia odds be ever in your favor! 🏆
       **Note:** If you want to exit the game early, use the command "/exit" to end your session and see your final score.
       **Have fun!** 🥳`.trim().split('\n').map(line => line.trim()).join('\n');
@@ -200,9 +200,10 @@ export default {
       )
     );
 
+    const catTime = Math.floor(Date.now() / 1000) + 45;
     // send message prompting user to pick category
     const categoryMessage = await interaction.followUp({
-      content: "Choose a category to start your trivia game! 🎯",
+      content: `Choose a category! 🎯\n⏰ **Decision ends** <t:${catTime}:R>`,
       components: [categoryButtons],
     });
 
@@ -213,7 +214,7 @@ export default {
       const collector = categoryMessage.createMessageComponentCollector({
         filter: i => i.user.id === userId,
         max: 1,
-        time: 30000, // 30s to pick category
+        time: 45000, // 45s to pick category
       });
 
       // collecter picks up selection from the user
@@ -231,8 +232,9 @@ export default {
         activeTrivia.set(buttonInteraction.user.id, session);
 
         // confirm category and remove buttons
+        // By sending a new string here, the timer is overwritten and "disappears"
         await buttonInteraction.update({
-          content: `You chose **${buttonInteraction.component.label}**! `,
+          content: `✅ You chose **${buttonInteraction.component.label}**! Let's move on.`,
           components: [],
         });
 
@@ -276,8 +278,9 @@ export default {
     )
   );
 
+  const diffTime = Math.floor(Date.now() / 1000) + 45;
   const difficultyMessage = await interaction.followUp({
-    content: "Now choose your difficulty! 💪",
+    content: `Now choose your difficulty! 💪\n⏰ **Decision ends** <t:${diffTime}:R>`,
     components: [difficultyButtons],
   });
 
@@ -285,7 +288,7 @@ export default {
     const collector = difficultyMessage.createMessageComponentCollector({
       filter: i => i.user.id === userId,
       max: 1,
-      time: 30000,
+      time: 45000,
     });
 
     collector.on("collect", async (buttonInteraction) => {
@@ -296,8 +299,9 @@ export default {
       session.difficulty = chosenDifficulty;
       activeTrivia.set(buttonInteraction.user.id, session);
 
+      // Overwrite the content to remove the timer visually
       await buttonInteraction.update({
-        content: `Difficulty set to **${buttonInteraction.component.label}**! Good luck 🍀`,
+        content: `✅ Difficulty set to **${buttonInteraction.component.label}**! Preparing questions...`,
         components: [],
       });
 
@@ -436,6 +440,10 @@ async function askQuestion(interaction, userId, q) {
   const session = activeTrivia.get(userId);
   if (!session) return true;
 
+  // Calculate the Unix timestamp for 45 seconds from now
+  const endTime = Math.floor(Date.now() / 1000) + 45;
+  const countdown = `<t:${endTime}:R>`;
+
   const correctLetter = letters[q.correctIndex];
 
   const row = new ActionRowBuilder().addComponents(
@@ -447,8 +455,9 @@ async function askQuestion(interaction, userId, q) {
     )
   );
 
+  // Add the countdown to the content string
   const questionMessage = await interaction.followUp({
-    content: `${q.question}\n\nChoose an answer below:`,
+    content: `⏰ **Round ending** ${countdown}\n\n**${q.question}**\n\nChoose an answer below:`,
     components: [row],
   });
 
@@ -457,7 +466,7 @@ async function askQuestion(interaction, userId, q) {
   return new Promise((resolve) => {
     const collector = questionMessage.createMessageComponentCollector({
       filter,
-      time: 30000,
+      time: 45000,
       max: 1
     });
 
@@ -521,9 +530,10 @@ async function askQuestion(interaction, userId, q) {
         })
       );
 
-      // Edit the original message with the new colors and streak
+      // IMPORTANT: When editing, do NOT include the 'countdown' variable. 
+      // This makes the timer disappear the moment they answer.
       await buttonInteraction.editReply({
-        content: `🧠 **Trivia Question:**\n${q.question}\n${result.message}${streakDisplay}\n\n⭐ Score: ${session.score}/${session.questionCount}\n\n 🎁 Bonus Points: ${session.miniChallengeScore || 0} \n\n`,
+        content: `🧠 **Trivia Result:**\n${q.question}\n${result.message}${streakDisplay}\n\n⭐ Score: ${session.score}/${session.questionCount}`,
         components: [updatedRow],
       });
 
@@ -548,11 +558,9 @@ async function askQuestion(interaction, userId, q) {
           )
           );
 
+          // Remove the countdown here too since time is up
           await questionMessage.edit({
-            content:
-              `🧠 **Trivia Question:**\n${q.question}\n\n` +
-              `⏰ **Time's up!**\n` +
-              `The correct answer was **${correctLetter}. ${correctText}**\n\n`,
+            content: `🧠 **Trivia Question:**\n${q.question}\n\n⏰ **Time's up!**\nThe correct answer was **${correctLetter}. ${q.options[q.correctIndex]}**`,
             components: [disabledRow],
           });
           resolve(true);

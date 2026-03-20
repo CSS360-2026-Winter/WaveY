@@ -12,7 +12,7 @@ export function showScoreboard(interaction) {
   const percent = questions > 0 ? score / questions : 0;
   const percentLabel = `${Math.round(percent * 100)}%`;
 
-  const didWin = percent >= 0.5; // 50% or more = win
+  const didWin = percent >= 0.75; //75% or more = win
 
   const winGif =
     "https://media.tenor.com/L9kNtb5Ak2IAAAAM/congrats-congratulations.gif";
@@ -36,8 +36,8 @@ export function showScoreboard(interaction) {
       `Bonus Points: **${session.miniChallengeScore}**\n` +
       `Best Streak: **${maxStreak}** ${streakIcon}\n\n` +
       (didWin
-        ? `✅ Congrats! You scored **50%+**!`
-        : `❌ Oof, You Lost — under **50%**! Try again!`),
+        ? `✅ Congrats! You scored **75%+**!`
+        : `❌ Oof, You Lost — under **75%**! Try again!`),
     image: { url: didWin ? winGif : loseGif },
     color: didWin ? 0xffd700 : 0xff4d4d,
   };
