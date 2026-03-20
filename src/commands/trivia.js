@@ -49,7 +49,7 @@ export default {
           Pop Quiz: A random question from any category for 1 extra point.
           Double Points: A question from your chosen category that is worth 2 points instead of 1!
         You will be given 30 seconds to accept or decline the bonus question 🙋
-      6) You also have 30 seconds to answer each question, so be quick! ⏰ 
+      6) You also have 45 seconds to answer each question, so be quick! ⏰ 
       All the best, and may the trivia odds be ever in your favor! 🏆
       **Note:** If you want to exit the game early, use the command "/exit" to end your session and see your final score.
       **Have fun!** 🥳`.trim().split('\n').map(line => line.trim()).join('\n');
@@ -104,7 +104,7 @@ export default {
       const collector = categoryMessage.createMessageComponentCollector({
         filter: i => i.user.id === userId,
         max: 1,
-        time: 30000, // 30s to pick category
+        time: 45000, // 45s to pick category
       });
 
       // collecter picks up selection from the user
@@ -176,7 +176,7 @@ export default {
     const collector = difficultyMessage.createMessageComponentCollector({
       filter: i => i.user.id === userId,
       max: 1,
-      time: 30000,
+      time: 45000,
     });
 
     collector.on("collect", async (buttonInteraction) => {
@@ -322,7 +322,7 @@ async function askQuestion(interaction, userId, q) {
   return new Promise((resolve) => {
     const collector = questionMessage.createMessageComponentCollector({
       filter,
-      time: 30000,
+      time: 45000,
       max: 1
     });
 
