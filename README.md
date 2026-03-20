@@ -30,7 +30,7 @@ The bot lets users start a personal trivia session via a slash command. Each gam
 - Exit command to end game early with "/exit"
 - Session management to prevent faulty gameplay
 
-**2.1 Feature updates:**
+**2.1 Version Updates:**
 - Users can now select the level of difficulty after selecting the category.
 - Users are now able to see a timer indicating the number of seconds (starts at 45s) they have left before the session times out across the questions, category selection, bonus round, difficulty level.
 - Mini challenges (bonus rounds) scattered throughout the game
